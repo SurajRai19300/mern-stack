@@ -1,0 +1,28 @@
+const express = require("express");
+const app = express();
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const userRoute = require('./routes/users');
+const auth =  require('./routes/auth');
+const posts = require("./routes/posts"); 
+
+dotenv.config();
+
+mongoose.connect(process.env.MONGO_URL).then(()=>console.log("mongod"))
+
+
+
+//middlewares
+app.use(express.json());
+app.use(helmet());
+app.use(morgan("common"));
+
+app.use("/api/users", userRoute)
+app.use("/api/auth", auth)  
+app.use("/api/posts", posts)
+
+app.listen(8800, ()=>{
+    console.log("Backend server running!"); 
+})
